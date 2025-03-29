@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import Image from "next/image"
+import Link from "next/link"
 
 const formSchema = z.object({
     username: z.string().min(2).max(50),
@@ -50,6 +51,10 @@ const AuthForm = ({ type } : { type: FormType }) => {
                         <Button type="submit" className="!w-full !bg-primary-200 !text-dark-100 hover:!bg-primary-200/80 !rounded-full !min-h-10 !font-bold !px-5 cursor-pointer">{isSingIn ? "Sign-In" : "Create an Account"}</Button>
                     </form>
                 </Form>
+                <p className="text-center">
+                    {isSingIn ? "No account yet?" : "Have an account Already?"}
+                    <Link href={!isSingIn ? "/sign-in" : "/sign-up" } className="font-bold text-user-primary ml-1" >{!isSingIn ? "Sing In" : "Sign Up"}</Link>
+                </p>
             </div>
         </div>
     )
