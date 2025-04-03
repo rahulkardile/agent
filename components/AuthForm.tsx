@@ -4,18 +4,12 @@ import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { Button } from "@/components/ui/button"
-import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+import { Form } from "@/components/ui/form"
 import Image from "next/image"
 import Link from "next/link"
+import { toast } from "sonner"
+import FormField from "./FormField"
+import { useRouter } from "next/navigation"
 
 const authFormSchema = (type: FormType) => {
     return z.object({
@@ -26,20 +20,37 @@ const authFormSchema = (type: FormType) => {
   };
 
 const AuthForm = ({ type } : { type: FormType }) => {
-
+    const router = useRouter();
+    const formSchema = authFormSchema(type);
     let isSingIn = type === "sign-in";
 
     // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            username: "",
+            name: "",
+            email:"",
+            password: ""
         },
     })
 
     // 2. Define a submit handler.
     function onSubmit(values: z.infer<typeof formSchema>) {
-        console.log(values)
+        console.log("test onSubmit");
+        
+        try {
+            if(type === "sign-in"){
+                toast.success("Sing In Successfull");
+                router.push("/");
+                console.log("Sign in : ", values)
+            }else{
+                toast.success("Sing Up Successful, Please Sign In");
+                router.push("/sign-in");
+                console.log("Sign up : ", values)
+            }
+        } catch (error) {
+            toast.error(`We got an error ${error}`)
+        }
     }
 
     return (
@@ -52,9 +63,9 @@ const AuthForm = ({ type } : { type: FormType }) => {
                 <h3 className="text-2xl text-center">Practies Job interview with AI</h3>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-8 mt-4">
-                        {!isSingIn && <p>Name</p>}
-                        <p>Email</p>
-                        <p>Password</p>
+                        {!isSingIn && (<FormField name="name" control={form.control} lable="Name" placeholder="Enter your name" type="text" />)}
+                        <FormField name="Email" control={form.control} lable="Email" placeholder="Enter your Email" type="email" />
+                        <FormField name="password" control={form.control} lable="Password" placeholder="Enter your password" type="password" />                        
                         <Button type="submit" className="!w-full !bg-primary-200 !text-dark-100 hover:!bg-primary-200/80 !rounded-full !min-h-10 !font-bold !px-5 cursor-pointer">{isSingIn ? "Sign-In" : "Create an Account"}</Button>
                     </form>
                 </Form>
