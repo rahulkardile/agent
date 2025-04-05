@@ -13,23 +13,23 @@ import { useRouter } from "next/navigation"
 
 const authFormSchema = (type: FormType) => {
     return z.object({
-      name: type === "sign-up" ? z.string().min(3) : z.string().optional(),
-      email: z.string().email(),
-      password: z.string().min(3),
+        name: type === "sign-up" ? z.string().min(3) : z.string().optional(),
+        email: z.string().email(),
+        password: z.string().min(3),
     });
-  };
+};
 
-const AuthForm = ({ type } : { type: FormType }) => {
+const AuthForm = ({ type }: { type: FormType }) => {
     const router = useRouter();
     const formSchema = authFormSchema(type);
-    let isSingIn = type === "sign-in";
+    let isSignIn = type === "sign-in";
 
     // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
-            email:"",
+            email: "",
             password: ""
         },
     })
@@ -37,13 +37,13 @@ const AuthForm = ({ type } : { type: FormType }) => {
     // 2. Define a submit handler.
     function onSubmit(values: z.infer<typeof formSchema>) {
         console.log("test onSubmit");
-        
+
         try {
-            if(type === "sign-in"){
+            if (type === "sign-in") {
                 toast.success("Sing In Successfull");
                 router.push("/");
                 console.log("Sign in : ", values)
-            }else{
+            } else {
                 toast.success("Sing Up Successful, Please Sign In");
                 router.push("/sign-in");
                 console.log("Sign up : ", values)
@@ -63,15 +63,38 @@ const AuthForm = ({ type } : { type: FormType }) => {
                 <h3 className="text-2xl text-center">Practies Job interview with AI</h3>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-8 mt-4">
-                        {!isSingIn && (<FormField name="name" control={form.control} lable="Name" placeholder="Enter your name" type="text" />)}
-                        <FormField name="Email" control={form.control} lable="Email" placeholder="Enter your Email" type="email" />
-                        <FormField name="password" control={form.control} lable="Password" placeholder="Enter your password" type="password" />                        
-                        <Button type="submit" className="!w-full !bg-primary-200 !text-dark-100 hover:!bg-primary-200/80 !rounded-full !min-h-10 !font-bold !px-5 cursor-pointer">{isSingIn ? "Sign-In" : "Create an Account"}</Button>
+                        {!isSignIn && (
+                            <FormField<z.infer<typeof formSchema>>
+                                name="name"
+                                control={form.control}
+                                label="Name"
+                                placeholder="Enter your name"
+                                type="text"
+                            />
+                        )}
+
+                        <FormField<z.infer<typeof formSchema>>
+                            name="email"
+                            control={form.control}
+                            label="Email"
+                            placeholder="Enter your email"
+                            type="email"
+                        />
+
+                        <FormField<z.infer<typeof formSchema>>
+                            name="password"
+                            control={form.control}
+                            label="Password"
+                            placeholder="Enter your password"
+                            type="password"
+                        />
+
+                        <Button type="submit" className="!w-full !bg-primary-200 !text-dark-100 hover:!bg-primary-200/80 !rounded-full !min-h-10 !font-bold !px-5 cursor-pointer">{isSignIn ? "Sign-In" : "Create an Account"}</Button>
                     </form>
                 </Form>
                 <p className="text-center">
-                    {isSingIn ? "No account yet?" : "Have an account Already?"}
-                    <Link href={!isSingIn ? "/sign-in" : "/sign-up" } className="font-bold text-user-primary ml-1" >{!isSingIn ? "Sing In" : "Sign Up"}</Link>
+                    {isSignIn ? "No account yet?" : "Have an account Already?"}
+                    <Link href={!isSignIn ? "/sign-in" : "/sign-up"} className="font-bold text-user-primary ml-1" >{!isSignIn ? "Sing In" : "Sign Up"}</Link>
                 </p>
             </div>
         </div>
