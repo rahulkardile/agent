@@ -2,7 +2,7 @@ import dayjs from 'dayjs'
 import Image from 'next/image';
 import { Button } from './ui/button';
 import Link from 'next/link';
-import { cn, getRandomInterviewCover, getTechLogos } from '@/lib/utils';
+import { getRandomInterviewCover, getTechLogos } from '@/lib/utils';
 
 const InterviewCard = async({ interviewId, userId, role, type, techstack, createdAt }: InterviewCardProps) => {
 
