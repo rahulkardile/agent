@@ -115,7 +115,7 @@ export async function getCurrentUser(): Promise<User | null> {
 
 export async function isAuthenticated() {
     const user = await getCurrentUser();
-    return !!user; //true/false
+    return !!user; // true / false
 }
 
 export async function getInterviewByUser(userId: string): Promise<Interview[] | null> {
