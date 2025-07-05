@@ -4,7 +4,7 @@ import { Button } from './ui/button';
 import Link from 'next/link';
 import { getRandomInterviewCover, getTechLogos } from '@/lib/utils';
 
-const InterviewCard = async({ interviewId, userId, role, type, techstack, createdAt }: InterviewCardProps) => {
+const InterviewCard = async({ id, userId, role, type, techstack, createdAt }: InterviewCardProps) => {
 
     const feedback = null as Feedback | null;
     const normalizedType = /mix/gi.test(type) ? 'Mixed' : type;
@@ -53,7 +53,7 @@ const InterviewCard = async({ interviewId, userId, role, type, techstack, create
                     }
 
                     <Button className='btn-primary'>
-                        <Link href={feedback ? `/interview/${interviewId}/feedback}` : `/interview/${interviewId}`}> {feedback ? "Check Feedback" : "View Interview"}</Link>
+                        <Link href={feedback ? `/interview/${id}/feedback}` : `/interview/${id}`}> {feedback ? "Check Feedback" : "View Interview"}</Link>
                     </Button>
 
                 </div>

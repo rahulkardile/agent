@@ -1,7 +1,8 @@
 import InterviewCard from '@/components/InterviewCard'
 import { Button } from '@/components/ui/button'
 import { dummyInterviews } from '@/constants'
-import { getCurrentUser, getInterviewByUser, getLastestInterviews } from '@/lib/actions/auth.action'
+import { getCurrentUser } from '@/lib/actions/auth.action'
+import { getInterviewByUser, getLastestInterviews } from '@/lib/actions/general.action'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -55,7 +56,7 @@ const page = async () => {
                 <p>There are no new interview awailable</p>
               )
           }
-          
+
           {/* <p>There are no interview available</p> */}
         </div>
       </section>
