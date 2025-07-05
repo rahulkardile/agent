@@ -64,30 +64,31 @@ const Agent = ({ userName, type, userId, interviewId, feedbackId, questions }: A
 
     }, [])
 
-    const handleGenerateFeedBack = async (messages: SavedMessage[])=>{
-        console.log('Generate feedback here');
-        const {success, id } = {
-            success: true,
-            id: 'feedback-id'
-        }       
-    
-        if(success && id){
-            router.push(`/interview/${interviewId}/feedback`)
-        }else{
-            console.log('Some error occured while saving the interview!');
-            router.push("/");
-        }
-    }
-
     useEffect(()=>{
-        if(callStatus === CallStatus.FINISHED){
+
+        const handleGenerateFeedBack = async (messages: SavedMessage[])=>{
+            console.log('Generate feedback here');
+            const {success, id } = {
+                success: true,
+                id: 'feedback-id'
+            }       
+        
+            if(success && id){
+                router.push(`/interview/${interviewId}/feedback`)
+            }else{
+                console.log('Some error occured while saving the interview!');
+                router.push("/");
+            }
+        }
+
+            if(callStatus === CallStatus.FINISHED){
             if(type === 'generate'){
                 router.push("/");
             }else{
                 handleGenerateFeedBack(messages);
             }
         }
-    },[messages, callStatus, type, userId])
+    },[messages, callStatus, type, userId, feedbackId, interviewId, router])
 
     const handleCall = async ()=> {
         setStatus(CallStatus.CONNECTING);
@@ -154,7 +155,6 @@ const Agent = ({ userName, type, userId, interviewId, feedbackId, questions }: A
                         </div>
                     </div>
                 )
-
             }
         
             <div className="w-full flex justify-center">
