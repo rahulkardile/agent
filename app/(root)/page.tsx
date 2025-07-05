@@ -1,7 +1,7 @@
 import InterviewCard from '@/components/InterviewCard'
 import { Button } from '@/components/ui/button'
 import { dummyInterviews } from '@/constants'
-import { getCurrentUser, getInterviewByUser } from '@/lib/actions/auth.action'
+import { getCurrentUser, getInterviewByUser, getLastestInterviews } from '@/lib/actions/auth.action'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -9,8 +9,13 @@ import React from 'react'
 const page = async () => {
 
   const user = await getCurrentUser();
-  const userInterviews = await getInterviewByUser(user?.id!);
+
+  const [userInterviews, lastetInterviews] = await Promise.all([
+    await getInterviewByUser(user?.id!),
+    await getLastestInterviews({ userId: user?.id! })
+  ])
   const hasPastInterviews = userInterviews?.length! > 0;
+  const hasUpCommingInterviews = lastetInterviews?.length! > 0;
 
   return (
     <>
@@ -30,7 +35,7 @@ const page = async () => {
 
           {
             hasPastInterviews ? userInterviews?.map((interview) => (
-            <InterviewCard {...interview} key={interview.id} />
+              <InterviewCard {...interview} key={interview.id} />
             )) : <p>You haven&apos;t taken any interview yet</p>
           }
 
@@ -41,10 +46,16 @@ const page = async () => {
         <h2>Take an Interview</h2>
         <div className="interviews-section">
 
-          {dummyInterviews.map((interview) => (
-            <InterviewCard {...interview} key={interview.id} />
-          ))}
 
+          {
+            hasUpCommingInterviews ? (
+              lastetInterviews?.map((interview)=>(
+                <InterviewCard {...interview} key={interview.id} />
+              ))) : (
+                <p>There are no new interview awailable</p>
+              )
+          }
+          
           {/* <p>There are no interview available</p> */}
         </div>
       </section>
